@@ -13,7 +13,7 @@ import sys
 from docx import Document
 from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.oxml import OxmlElement
+from docx.oxml import OxmlElement, parse_xml
 from docx.oxml.ns import qn
 from docx.shared import Mm, Pt, RGBColor
 from playwright.sync_api import sync_playwright
@@ -22,7 +22,7 @@ from playwright.sync_api import sync_playwright
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 SHOTS = DOCS / "screenshots"
-FONT = "Noto Sans CJK KR"
+FONT = "Noto Sans KR Medium"
 CHOICE_PROMPT = "Rock (1), Paper (2), Scissors (3), Quit (0): "
 LEGEND = "○-Player ●-Computer ◐-Player & Computer"
 
@@ -280,9 +280,21 @@ def write_html(pages):
     return destination
 
 
+def set_docx_typeface(properties):
+    """Apply the Word typeface to every script, without theme overrides."""
+    fonts = properties.find(qn('w:rFonts'))
+    if fonts is None:
+        fonts = OxmlElement('w:rFonts')
+        properties.insert(0, fonts)
+    for attribute in list(fonts.attrib):
+        if 'theme' in attribute.lower():
+            del fonts.attrib[attribute]
+    for script in ('ascii', 'hAnsi', 'eastAsia', 'cs'):
+        fonts.set(qn(f'w:{script}'), FONT)
+
+
 def set_font(run, size=None, bold=None, color=None):
-    run.font.name = FONT
-    run._element.get_or_add_rPr().rFonts.set(qn("w:eastAsia"), FONT)
+    set_docx_typeface(run._element.get_or_add_rPr())
     if size:
         run.font.size = Pt(size)
     if bold is not None:
@@ -306,23 +318,45 @@ def keep_table_row(row):
 
 def write_docx(pages):
     document = Document()
+    # Set template styles and inherited text, including page-number fields.
+    for style in document.styles:
+        set_docx_typeface(style._element.get_or_add_rPr())
+    defaults = document.styles.element.find(qn('w:docDefaults'))
+    if defaults is None:
+        defaults = OxmlElement('w:docDefaults')
+        document.styles.element.insert(0, defaults)
+    run_defaults = defaults.find(qn('w:rPrDefault'))
+    if run_defaults is None:
+        run_defaults = OxmlElement('w:rPrDefault')
+        defaults.append(run_defaults)
+    properties = run_defaults.find(qn('w:rPr'))
+    if properties is None:
+        properties = OxmlElement('w:rPr')
+        run_defaults.append(properties)
+    set_docx_typeface(properties)
+    # Conditional table styles can contain their own nested run properties.
+    for properties in document.styles.element.iter(qn('w:rPr')):
+        set_docx_typeface(properties)
+    # Word's companion style part is carried by the template as opaque XML.
+    for part in document.part.package.parts:
+        if str(part.partname) == '/word/stylesWithEffects.xml':
+            styles = parse_xml(part.blob)
+            for properties in styles.iter(qn('w:rPr')):
+                set_docx_typeface(properties)
+            part._blob = styles.xml.encode('utf-8')
     section = document.sections[0]
     section.page_width, section.page_height = Mm(210), Mm(297)
     section.top_margin = section.bottom_margin = Mm(18)
     section.left_margin = section.right_margin = Mm(18)
     section.header_distance = section.footer_distance = Mm(9)
     normal = document.styles['Normal']
-    normal.font.name = FONT
     normal.font.size = Pt(10)
-    normal._element.get_or_add_rPr().rFonts.set(qn('w:eastAsia'), FONT)
     normal.paragraph_format.line_spacing = 1.2
     normal.paragraph_format.space_after = Pt(5)
     for name, size in [('Title', 29), ('Heading 1', 18), ('Heading 2', 11)]:
         style = document.styles[name]
-        style.font.name = FONT
         style.font.size = Pt(size)
         style.font.color.rgb = RGBColor.from_string('173E65')
-        style._element.get_or_add_rPr().rFonts.set(qn('w:eastAsia'), FONT)
         style.paragraph_format.space_before = Pt(9)
         style.paragraph_format.space_after = Pt(5)
     header = section.header.paragraphs[0]
