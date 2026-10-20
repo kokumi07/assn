@@ -1,0 +1,73 @@
+=== Rock-Paper-Scissors Stair Game ===
+
+Enter the number of steps (5–20): 5
+
+○-Player ●-Computer ◐-Player & Computer
+
+[ 5]◐
+[ 4]▨
+[ 3]▨▨
+[ 2]▨▨▨
+[ 1]▨▨▨▨
+[ 0]▨▨▨▨▨
+
+Player = 5, Computer = 5
+Rock (1), Paper (2), Scissors (3), Quit (0): 1
+
+Player: Rock
+Computer: Scissors
+Player wins!
+
+Press ENTER to continue...
+
+○-Player ●-Computer ◐-Player & Computer
+
+[ 5]●
+[ 4]▨○
+[ 3]▨▨
+[ 2]▨▨▨
+[ 1]▨▨▨▨
+[ 0]▨▨▨▨▨
+
+Player = 4, Computer = 5
+Rock (1), Paper (2), Scissors (3), Quit (0): 1
+
+Player: Rock
+Computer: Paper
+Computer wins!
+
+Press ENTER to continue...
+
+○-Player ●-Computer ◐-Player & Computer
+
+[ 5]
+[ 4]▨○
+[ 3]▨▨●
+[ 2]▨▨▨
+[ 1]▨▨▨▨
+[ 0]▨▨▨▨▨
+
+Player = 4, Computer = 3
+Rock (1), Paper (2), Scissors (3), Quit (0): 2
+
+Player: Paper
+Computer: Paper
+Tie!
+
+Press ENTER to continue...
+
+○-Player ●-Computer ◐-Player & Computer
+
+[ 5]
+[ 4]▨○
+[ 3]▨▨●
+[ 2]▨▨▨
+[ 1]▨▨▨▨
+[ 0]▨▨▨▨▨
+
+Player = 4, Computer = 3
+Rock (1), Paper (2), Scissors (3), Quit (0): 0
+
+Are you sure you want to quit? (yes/no): yes
+
+Game Over!

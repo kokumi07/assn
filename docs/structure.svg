@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="300" viewBox="0 0 960 300">
+    <rect width="960" height="300" fill="white"/>
+    <g fill="none" stroke="#8ea9c4" stroke-width="2.5">
+      <path d="M480 76 V110 M160 110 H800 M160 110 V142 M480 110 V142 M800 110 V142"/>
+    </g>
+    <rect x="330" y="12" width="300" height="64" rx="9" fill="#173e65"/>
+    <text x="480" y="40" text-anchor="middle" fill="white" font-size="23">play_game()</text>
+    <text x="480" y="63" text-anchor="middle" fill="white" font-size="17">입력·라운드 반복·종료 관리</text>
+    <g fill="#eff5fb" stroke="#9fb9d0" stroke-width="1.5">
+      <rect x="12" y="142" width="296" height="138" rx="8"/>
+      <rect x="332" y="142" width="296" height="138" rx="8"/>
+      <rect x="652" y="142" width="296" height="138" rx="8"/>
+    </g>
+    <g text-anchor="middle" fill="#173e65" font-size="22">
+      <text x="160" y="174">입력 / 선택</text><text x="480" y="174">판정 / 이동</text><text x="800" y="174">출력</text>
+    </g>
+    <g text-anchor="middle" fill="#243648" font-size="20">
+      <text x="160" y="211">get_player_choice()</text><text x="160" y="245">get_computer_choice()</text>
+      <text x="480" y="211">determine_winner(...)</text><text x="480" y="245">update_position(...)</text>
+      <text x="800" y="211">print_stairs(...)</text><text x="800" y="245" font-size="17">계단 + 현재 위치</text>
+    </g></svg>

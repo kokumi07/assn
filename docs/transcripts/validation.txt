@@ -1,0 +1,25 @@
+=== Rock-Paper-Scissors Stair Game ===
+
+Enter the number of steps (5–20): 3
+Invalid input!
+
+Enter the number of steps (5–20): 123
+Invalid input!
+
+Enter the number of steps (5–20): 5
+
+○-Player ●-Computer ◐-Player & Computer
+
+[ 5]◐
+[ 4]▨
+[ 3]▨▨
+[ 2]▨▨▨
+[ 1]▨▨▨▨
+[ 0]▨▨▨▨▨
+
+Player = 5, Computer = 5
+Rock (1), Paper (2), Scissors (3), Quit (0): 0
+
+Are you sure you want to quit? (yes/no): yes
+
+Game Over!
